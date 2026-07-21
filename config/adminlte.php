@@ -334,7 +334,7 @@ return [
                 [
                     'text' => 'PIC',
                     'icon' => 'fas fa-user',
-                    'url' => '#',
+                    'url' => 'pic',
                 ],
                 [
                     'text' => 'Barang Jadi',

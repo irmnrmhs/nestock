@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
+use App\Models\pic;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class SupplierController extends Controller
+class PicController extends Controller
 {
-    public string $obj = 'Supplier';
+    public string $obj = 'PIC';
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $suppliers = Supplier::latest()->get();
-        return view('masters.supplier', compact('suppliers'));
+        $pics = pic::latest()->get();
+        return view('masters.pic', compact('pics'));
     }
 
     /**
@@ -32,32 +32,30 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'supplier'=>'required|string',
-            'kode'=>'required|string|unique:suppliers,kode',
-            'ket'=>'nullable|string'
+            'nama'=>'required|string',
         ]);
 
-        $supplier = Supplier::create($validated);
+        $pic = pic::create($validated);
 
         return response()->json([
             'status'=>'success',
             'message' => 'Data ' . $this->obj . ' berhasil ditambahkan',
-            'data'=>$supplier
+            'data'=>$pic
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Supplier $supplier)
+    public function show(pic $pic)
     {
-        return response()->json($supplier);
+        return response()->json($pic);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Supplier $supplier)
+    public function edit(pic $pic)
     {
         //
     }
@@ -65,15 +63,13 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Supplier $supplier)
+    public function update(Request $request, pic $pic)
     {
         $validated = $request->validate([
-            'supplier'  => 'required|string',
-            'kode'      => 'required|string|unique:suppliers,kode,'.$supplier->id,
-            'ket'       => 'nullable|string',
+            'nama'  => 'required|string',
         ]);
 
-        $supplier->update($validated);
+        $pic->update($validated);
 
         return response()->json([
             'status' => 'success',
@@ -84,9 +80,9 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(pic $pic)
     {
-        $supplier->delete();
+        $pic->delete();
 
         return response()->json([
             'status'=>'success',
