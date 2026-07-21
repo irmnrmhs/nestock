@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class SupplierController extends Controller
 {
+    public string $obj = 'Supplier';
     /**
      * Display a listing of the resource.
      */
@@ -31,17 +33,18 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'supplier'  => 'required|string',
-            'kode'      => 'required|string|unique:suppliers,kode',
-            'ket'       => 'nullable|string',
+            'supplier'=>'required|string|max:255',
+            'kode'=>'required|string|max:255|unique:suppliers,kode',
+            'ket'=>'nullable|string'
         ]);
 
         $supplier = Supplier::create($validated);
 
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Data Supplier berhasil ditambahkan.',
-        // ]);
+        return response()->json([
+            'status'=>'success',
+            'message' => 'Data ' . $this->obj . ' berhasil ditambahkan',
+            'data'=>$supplier
+        ]);
     }
 
     /**
@@ -49,7 +52,6 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        $supplier = Supplier::findOrFail($supplier);
         return response()->json($supplier);
     }
 
@@ -64,21 +66,20 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Supplier $supplier)
+    public function update(Request $request, Supplier $supplier): JsonResponse
     {
         $validated = $request->validate([
             'supplier'  => 'required|string',
-            'kode'      => 'required|string|unique:suppliers,kode,'.$supplier,
+            'kode'      => 'required|string|unique:suppliers,kode,'.$supplier->id,
             'ket'       => 'nullable|string',
         ]);
 
-        $supplier = Supplier::findOrFail($supplier);
         $supplier->update($validated);
 
-        // return response()->json([
-        //         'status' => 'success',
-        //         'message' => 'Data Supplier berhasil diperbaharui.',
-        // ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data ' . $this->obj . ' berhasil diperbaharui',
+        ]);
     }
 
     /**
@@ -86,12 +87,11 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        $supplier = Supplier::findOrFail($supplier);
         $supplier->delete();
 
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Data Supplier berhasil dihapus.',
-        // ]);
+        return response()->json([
+            'status'=>'success',
+            'message' => 'Data ' . $this->obj . ' berhasil dihapus',
+        ]);
     }
 }
