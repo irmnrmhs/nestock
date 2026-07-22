@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class SupplierController extends Controller
+class ProductController extends Controller
 {
-    public string $obj = 'Supplier';
-    
+    public string $obj = 'Barang Jadi';
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $suppliers = Supplier::latest()->get();
-        return view('masters.supplier', compact('suppliers'));
+        $products = Product::latest()->get();
+        return view('masters.product', compact('products'));
     }
 
     /**
@@ -33,32 +33,32 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'supplier'=>'required|string',
-            'kode'=>'required|string|unique:suppliers,kode',
+            'grade'=>'required|string',
+            'kode'=>'required|string|unique:products,kode',
             'ket'=>'nullable|string'
         ]);
 
-        $supplier = Supplier::create($validated);
+        $product = Product::create($validated);
 
         return response()->json([
             'status'=>'success',
             'message' => 'Data ' . $this->obj . ' berhasil ditambahkan',
-            'data'=>$supplier
+            'data'=>$product
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Supplier $supplier)
+    public function show(Product $product)
     {
-        return response()->json($supplier);
+        return response()->json($product);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Supplier $supplier)
+    public function edit(Product $product)
     {
         //
     }
@@ -66,15 +66,15 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Supplier $supplier)
+    public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'supplier'  => 'required|string',
-            'kode'      => 'required|string|unique:suppliers,kode,'.$supplier->id,
+            'grade'  => 'required|string',
+            'kode'      => 'required|string|unique:products,kode,'.$product->id,
             'ket'       => 'nullable|string',
         ]);
 
-        $supplier->update($validated);
+        $product->update($validated);
 
         return response()->json([
             'status' => 'success',
@@ -85,9 +85,9 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(Product $product)
     {
-        $supplier->delete();
+        $product->delete();
 
         return response()->json([
             'status'=>'success',

@@ -1,25 +1,21 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Supplier';
-    $singular = 'Supplier';
+    $title = 'Kelola Data PIC';
+    $singular = 'PIC';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Supplier</th>
-    <th>Kode Supplier</th>
-    <th>Keterangan</th>
+    <th>Nama PIC</th>
 @stop
 
 @section('table-body')
-    @foreach($suppliers as $index => $supplier)
-        <tr data-id="{{ $supplier->id }}">
+    @foreach($pics as $index => $pic)
+        <tr data-id="{{ $pic->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $supplier->supplier }}</td>
-            <td>{{ $supplier->kode }}</td>
-            <td>{{ empty($supplier->ket) ? '-' : $supplier->ket }}</td>
+            <td>{{ $pic->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -30,31 +26,19 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Supplier</label>
-        <input type="text" id="supplier" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-        <label>Kode</label>
-        <input type="text" id="kode" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-        <label>Keterangan</label>
-        <input type="text" id="ket" class="form-control">
+        <label>Nama PIC</label>
+        <input type="text" id="nama" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/supplier/${id}` : '/supplier';
+    const url = id ? `/pic/${id}` : '/pic';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        supplier: $('#supplier').val(),
-        kode: $('#kode').val(),
-        ket: $('#ket').val(),
+        nama: $('#nama').val(),
     };
 
     fetch(url, {
@@ -70,20 +54,18 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data', 'error'));
 @stop
 
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/supplier/${id}`)
+        fetch(`/pic/${id}`)
             .then(r => r.json())
-            .then(supplier => {
-                $('#item_id').val(supplier.id);
-                $('#supplier').val(supplier.supplier);
-                $('#kode').val(supplier.kode);
-                $('#ket').val(supplier.ket);
-                $('#modalTitle').text('Edit Supplier');
+            .then(pic => {
+                $('#item_id').val(pic.id);
+                $('#nama').val(pic.nama);
+                $('#modalTitle').text('Edit PIC');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -99,7 +81,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/supplier/${id}`, {
+                fetch(`/pic/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

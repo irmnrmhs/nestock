@@ -334,12 +334,12 @@ return [
                 [
                     'text' => 'PIC',
                     'icon' => 'fas fa-user',
-                    'url' => '#',
+                    'url' => 'pic',
                 ],
                 [
                     'text' => 'Barang Jadi',
                     'icon' => 'fas fa-shopping-cart',
-                    'url' => '#',
+                    'url' => 'product',
                 ],
             ],
         ],    
@@ -350,7 +350,7 @@ return [
                 [
                     'text' => 'Stok Masuk',
                     'icon' => 'fas fa-sign-in-alt',
-                    'url' => '#',
+                    'url' => 'incoming',
                 ],
                 [
                     'text' => 'Stok Keluar',

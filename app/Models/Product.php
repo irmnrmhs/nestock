@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier extends Model
+class Product extends Model
 {
     protected $fillable = [
-        'supplier',
+        'grade',
         'kode',
         'ket',
     ];
 
     public function inStoks()
     {
-        return $this->hasMany(IncomingStock::class, 'supplier_id');
+        return $this->hasMany(IncomingStock::class, 'product_id');
     }
 }

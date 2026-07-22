@@ -1,25 +1,25 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Supplier';
-    $singular = 'Supplier';
+    $title = 'Kelola Data Barang Jadi';
+    $singular = 'Barang Jadi';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Supplier</th>
-    <th>Kode Supplier</th>
+    <th>Grade</th>
+    <th>Kode</th>
     <th>Keterangan</th>
 @stop
 
 @section('table-body')
-    @foreach($suppliers as $index => $supplier)
-        <tr data-id="{{ $supplier->id }}">
+    @foreach($products as $index => $product)
+        <tr data-id="{{ $product->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $supplier->supplier }}</td>
-            <td>{{ $supplier->kode }}</td>
-            <td>{{ empty($supplier->ket) ? '-' : $supplier->ket }}</td>
+            <td>{{ $product->grade }}</td>
+            <td>{{ $product->kode }}</td>
+            <td>{{ empty($product->ket) ? '-' : $product->ket }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -30,8 +30,8 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Supplier</label>
-        <input type="text" id="supplier" class="form-control" required>
+        <label>Grade</label>
+        <input type="text" id="grade" class="form-control" required>
     </div>
 
     <div class="mb-3">
@@ -47,12 +47,12 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/supplier/${id}` : '/supplier';
+    const url = id ? `/product/${id}` : '/product';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        supplier: $('#supplier').val(),
+        grade: $('#grade').val(),
         kode: $('#kode').val(),
         ket: $('#ket').val(),
     };
@@ -76,14 +76,14 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/supplier/${id}`)
+        fetch(`/product/${id}`)
             .then(r => r.json())
-            .then(supplier => {
-                $('#item_id').val(supplier.id);
-                $('#supplier').val(supplier.supplier);
-                $('#kode').val(supplier.kode);
-                $('#ket').val(supplier.ket);
-                $('#modalTitle').text('Edit Supplier');
+            .then(product => {
+                $('#item_id').val(product.id);
+                $('#grade').val(product.grade);
+                $('#kode').val(product.kode);
+                $('#ket').val(product.ket);
+                $('#modalTitle').text('Edit Product');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -99,7 +99,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/supplier/${id}`, {
+                fetch(`/product/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

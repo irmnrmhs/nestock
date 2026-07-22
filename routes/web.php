@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\IncomingStockController;
+use App\Http\Controllers\PicController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +27,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/supplier/{supplier}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     // Route::resource('supplier', SupplierController::class)
     //     ->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('/pic', [PicController::class, 'index'])->name('pic.index');
+    Route::post('/pic', [PicController::class, 'store'])->name('pic.store');
+    Route::get('/pic/{pic}', [PicController::class, 'show'])->name('pic.show');
+    Route::put('/pic/{pic}', [PicController::class, 'update'])->name('pic.update');
+    Route::delete('/pic/{pic}', [PicController::class, 'destroy'])->name('pic.destroy');
+
+    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+    Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+    Route::get('/incoming', [IncomingStockController::class, 'index'])->name('incoming.index');
+    Route::post('/incoming', [IncomingStockController::class, 'store'])->name('incoming.store');
+    Route::get('/incoming/{incomingStock}', [IncomingStockController::class, 'show'])->name('incoming.show');
+    Route::put('/incoming/{incomingStock}', [IncomingStockController::class, 'update'])->name('incoming.update');
+    Route::delete('/incoming/{incomingStock}', [IncomingStockController::class, 'destroy'])->name('incoming.destroy');
 });
 
 require __DIR__.'/auth.php';
