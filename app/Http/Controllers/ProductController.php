@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    public string $obj = 'Barang Jadi';
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $products = Product::latest()->get();
+        return view('masters.product', compact('products'));
     }
 
     /**
@@ -28,7 +32,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'grade'=>'required|string',
+            'kode'=>'required|string|unique:products,kode',
+            'ket'=>'nullable|string'
+        ]);
+
+        $product = Product::create($validated);
+
+        return response()->json([
+            'status'=>'success',
+            'message' => 'Data ' . $this->obj . ' berhasil ditambahkan',
+            'data'=>$product
+        ]);
     }
 
     /**
@@ -36,7 +52,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json($product);
     }
 
     /**
@@ -52,7 +68,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $validated = $request->validate([
+            'grade'  => 'required|string',
+            'kode'      => 'required|string|unique:products,kode,'.$product->id,
+            'ket'       => 'nullable|string',
+        ]);
+
+        $product->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data ' . $this->obj . ' berhasil diperbaharui',
+        ]);
     }
 
     /**
@@ -60,6 +87,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response()->json([
+            'status'=>'success',
+            'message' => 'Data ' . $this->obj . ' berhasil dihapus',
+        ]);
     }
 }

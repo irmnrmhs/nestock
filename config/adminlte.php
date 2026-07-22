@@ -339,7 +339,7 @@ return [
                 [
                     'text' => 'Barang Jadi',
                     'icon' => 'fas fa-shopping-cart',
-                    'url' => '#',
+                    'url' => 'product',
                 ],
             ],
         ],    

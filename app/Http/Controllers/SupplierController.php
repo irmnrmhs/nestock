@@ -9,6 +9,7 @@ use Illuminate\View\View;
 class SupplierController extends Controller
 {
     public string $obj = 'Supplier';
+    
     /**
      * Display a listing of the resource.
      */

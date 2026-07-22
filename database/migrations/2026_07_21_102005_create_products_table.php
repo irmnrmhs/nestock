@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('grade');
+            $table->string('kode')->unique();
+            $table->string('ket')->nullable();
             $table->timestamps();
         });
     }
