@@ -11,4 +11,9 @@ class Supplier extends Model
         'kode',
         'ket',
     ];
+
+    public function inStoks()
+    {
+        return $this->hasMany(IncomingStock::class, 'supplier_id');
+    }
 }

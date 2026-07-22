@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncomingStockController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -38,6 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
     Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+    Route::get('/incoming', [IncomingStockController::class, 'index'])->name('incoming.index');
+    Route::post('/incoming', [IncomingStockController::class, 'store'])->name('incoming.store');
+    Route::get('/incoming/{incomingStock}', [IncomingStockController::class, 'show'])->name('incoming.show');
+    Route::put('/incoming/{incomingStock}', [IncomingStockController::class, 'update'])->name('incoming.update');
+    Route::delete('/incoming/{incomingStock}', [IncomingStockController::class, 'destroy'])->name('incoming.destroy');
 });
 
 require __DIR__.'/auth.php';
