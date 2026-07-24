@@ -28,6 +28,21 @@ class IncomingStock extends Model
 
     public function pic()
     {
-        return $this->belongsTo(pic::class, 'pic_id');
+        return $this->belongsTo(Pic::class, 'pic_id');
+    }
+
+    public function outStocks()
+    {
+        return $this->hasMany(OutgoingStock::class, 'incoming_stock_id');
+    }
+
+    public function getSisaKuantitasAttribute()
+    {
+        return $this->kuantitas - $this->outStocks()->sum('kuantitas');
+    }
+
+    public function getSisaBeratAttribute()
+    {
+        return $this->berat - $this->outStocks()->sum('berat');
     }
 }

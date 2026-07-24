@@ -1,16 +1,14 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Stok Masuk';
-    $singular = 'Stok Masuk';
+    $title = 'Kelola Data Stok Keluar';
+    $singular = 'Stok Keluar';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Kode</th>
-    <th>Supplier</th>
-    <th>Grade</th>
+    <th>Kode Barang Jadi</th>
     <th>Tanggal</th>
     <th>Kuantitas</th>
     <th>Berat</th>
@@ -18,16 +16,14 @@
 @stop
 
 @section('table-body')
-    @foreach($inStocks as $index => $inStock)
-        <tr data-id="{{ $inStock->id }}">
+    @foreach($outStocks as $index => $outStock)
+        <tr data-id="{{ $outStock->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $inStock->kode }}</td>
-            <td>{{ $inStock->supplier->supplier }}</td>
-            <td>{{ $inStock->product->grade }}</td>
-            <td>{{ $inStock->tanggal }}</td>
-            <td>{{ $inStock->kuantitas }}</td>
-            <td>{{ $inStock->berat }}</td>
-            <td>{{ optional($inStock->pic)->nama ?? '-' }}</td>
+            <td>{{ $outStock->inStock->kode }}</td>
+            <td>{{ $outStock->tanggal }}</td>
+            <td>{{ $outStock->kuantitas }}</td>
+            <td>{{ $outStock->berat }}</td>
+            <td>{{ optional($outStock->pic)->nama ?? '-' }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -38,21 +34,11 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Supplier</label>
-        <select id="supplier_id" class="form-control">
-            <option value="">Pilih Supplier</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->supplier }}</option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Grade</label>
-        <select id="product_id" class="form-control">
-            <option value="">Pilih Grade</option>
-            @foreach($products as $product)
-                <option value="{{ $product->id }}">{{ $product->grade }}</option>
+        <label>Kode Barang Jadi</label>
+        <select id="incoming_stock_id" class="form-control">
+            <option value="">Pilih Barang Jadi</option>
+            @foreach($inStocks as $inStock)
+                <option value="{{ $inStock->id }}">{{ $inStock->kode }}</option>
             @endforeach
         </select>
     </div>
@@ -85,14 +71,12 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/incoming-stock/${id}` : '/incoming-stock';
+    const url = id ? `/outgoing-stock/${id}` : '/outgoing-stock';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        kode: $('#kode').val(),
-        supplier_id: $('#supplier_id').val(),
-        product_id: $('#product_id').val(),
+        incoming_stock_id: $('#incoming_stock_id').val(),
         tanggal: $('#tanggal').val(),
         kuantitas: $('#kuantitas').val(),
         berat: $('#berat').val(),
@@ -118,18 +102,16 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/incoming-stock/${id}`)
+        fetch(`/outgoing-stock/${id}`)
             .then(r => r.json())
-            .then(inStock => {
-                $('#item_id').val(inStock.id);
-                $('#kode').val(inStock.kode);
-                $('#supplier_id').val(inStock.supplier_id);
-                $('#product_id').val(inStock.product_id);
-                $('#tanggal').val(inStock.tanggal);
-                $('#kuantitas').val(inStock.kuantitas);
-                $('#berat').val(inStock.berat);
-                $('#pic_id').val(inStock.pic_id);
-                $('#modalTitle').text('Edit Stok Masuk');
+            .then(outStock => {
+                $('#item_id').val(outStock.id);
+                $('#incoming_stock_id').val(outStock.incoming_stock_id);
+                $('#tanggal').val(outStock.tanggal);
+                $('#kuantitas').val(outStock.kuantitas);
+                $('#berat').val(outStock.berat);
+                $('#pic_id').val(outStock.pic_id);
+                $('#modalTitle').text('Edit Stok Keluar');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -145,7 +127,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/incoming-stock/${id}`, {
+                fetch(`/outgoing-stock/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class pic extends Model
+class Pic extends Model
 {
     protected $fillable = [
         'nama',
@@ -13,5 +13,10 @@ class pic extends Model
     public function inStoks()
     {
         return $this->hasMany(IncomingStock::class, 'pic_id');
+    }
+
+    public function outStoks()
+    {
+        return $this->hasMany(OutgoingStock::class, 'pic_id');
     }
 }

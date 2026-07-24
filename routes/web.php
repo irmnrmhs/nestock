@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IncomingStockController;
+use App\Http\Controllers\OutgoingStockController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -40,11 +41,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
-    Route::get('/incoming', [IncomingStockController::class, 'index'])->name('incoming.index');
-    Route::post('/incoming', [IncomingStockController::class, 'store'])->name('incoming.store');
-    Route::get('/incoming/{incomingStock}', [IncomingStockController::class, 'show'])->name('incoming.show');
-    Route::put('/incoming/{incomingStock}', [IncomingStockController::class, 'update'])->name('incoming.update');
-    Route::delete('/incoming/{incomingStock}', [IncomingStockController::class, 'destroy'])->name('incoming.destroy');
+    Route::get('/incoming-stock', [IncomingStockController::class, 'index'])->name('incoming.index');
+    Route::post('/incoming-stock', [IncomingStockController::class, 'store'])->name('incoming.store');
+    Route::get('/incoming-stock/{incomingStock}', [IncomingStockController::class, 'show'])->name('incoming.show');
+    Route::put('/incoming-stock/{incomingStock}', [IncomingStockController::class, 'update'])->name('incoming.update');
+    Route::delete('/incoming-stock/{incomingStock}', [IncomingStockController::class, 'destroy'])->name('incoming.destroy');
+
+    Route::get('/outgoing-stock', [OutgoingStockController::class, 'index'])->name('incoming.index');
+    Route::post('/outgoing-stock', [OutgoingStockController::class, 'store'])->name('outgoing.store');
+    Route::get('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'show'])->name('outgoing.show');
+    Route::put('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'update'])->name('outgoing.update');
+    Route::delete('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'destroy'])->name('outgoing.destroy');
 });
 
 require __DIR__.'/auth.php';

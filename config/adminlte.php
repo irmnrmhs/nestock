@@ -350,12 +350,12 @@ return [
                 [
                     'text' => 'Stok Masuk',
                     'icon' => 'fas fa-sign-in-alt',
-                    'url' => 'incoming',
+                    'url' => 'incoming-stock',
                 ],
                 [
                     'text' => 'Stok Keluar',
                     'icon' => 'fas fa-sign-out-alt',
-                    'url' => '#',
+                    'url' => 'outgoing-stock',
                 ],
             ],
         ],    

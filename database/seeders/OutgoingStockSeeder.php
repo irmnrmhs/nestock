@@ -2,23 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Pic;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PicSeeder extends Seeder
+class OutgoingStockSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Pic::create([
-            'nama' => 'PIC 1',
-        ]);
-
-        Pic::create([
-            'nama' => 'PIC 2',
-        ]);
+        //
     }
 }
