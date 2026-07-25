@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
     {
         Product::create([
             'grade'  => 'Suzhan 2,5 gram', 
-            'kode'  => 'S1/2',
+            'kode'  => 'S2,5',
         ]);
 
         Product::create([

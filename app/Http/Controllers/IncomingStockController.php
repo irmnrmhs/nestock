@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IncomingStock;
-use App\Models\pic;
+use App\Models\Pic;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class IncomingStockController extends Controller
         $inStocks = IncomingStock::with(['supplier', 'product', 'pic'])->latest()->get();
         $suppliers = Supplier::all();
         $products = Product::all();
-        $pics = pic::all();
+        $pics = Pic::all();
 
         return view('stocks.incoming', compact('inStocks', 'suppliers', 'products', 'pics'));
     }

@@ -318,8 +318,8 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'Home',
-            'icon' => 'fas fa-home',
+            'text' => 'Dashboard',
+            'icon' => 'fas fa-tachometer-alt',
             'url' => 'dashboard',
         ],
         [
@@ -350,25 +350,26 @@ return [
                 [
                     'text' => 'Stok Masuk',
                     'icon' => 'fas fa-sign-in-alt',
-                    'url' => 'incoming',
+                    'url' => 'incoming-stock',
                 ],
                 [
                     'text' => 'Stok Keluar',
                     'icon' => 'fas fa-sign-out-alt',
-                    'url' => '#',
+                    'url' => 'outgoing-stock',
                 ],
             ],
         ],    
         [
-            'text' => 'Summary',
+            'text' => 'Ringkasan Stok',
             'icon' => 'fas fa-copy',
-            'submenu' => [
-                [
-                    'text' => 'Stok',
-                    'icon' => 'fas fa-box',
-                    'url' => '#',
-                ],
-            ]
+            'url' => 'summary-stock',
+            // 'submenu' => [
+            //     [
+            //         'text' => 'Stok',
+            //         'icon' => 'fas fa-box',
+            //         'url' => '#',
+            //     ],
+            // ]
         ]    
 
 
