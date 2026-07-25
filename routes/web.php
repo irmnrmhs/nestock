@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncomingStockController;
 use App\Http\Controllers\OutgoingStockController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,9 +14,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'show'])->name('outgoing.show');
     Route::put('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'update'])->name('outgoing.update');
     Route::delete('/outgoing-stock/{outgoingStock}', [OutgoingStockController::class, 'destroy'])->name('outgoing.destroy');
+    
+    Route::get('/summary-stock', [SummaryController::class, 'index'])->name('summary.index');
+    Route::post('/summary-stock/export', [SummaryController::class, 'export'])->name('summary.export');
 });
 
 require __DIR__.'/auth.php';

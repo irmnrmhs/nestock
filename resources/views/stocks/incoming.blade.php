@@ -12,7 +12,7 @@
     <th>Supplier</th>
     <th>Grade</th>
     <th>Tanggal</th>
-    <th>Kuantitas</th>
+    <th>Keping</th>
     <th>Berat</th>
     <th>PIC</th>
 @stop
@@ -63,7 +63,7 @@
     </div>
 
     <div class="mb-3">
-        <label>Kuantitas (pcs)</label>
+        <label>Keping (pcs)</label>
         <input type="number" id="kuantitas" min="0" step="1" class="form-control">
     </div>
 

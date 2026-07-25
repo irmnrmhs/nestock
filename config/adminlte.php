@@ -318,8 +318,8 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'Home',
-            'icon' => 'fas fa-home',
+            'text' => 'Dashboard',
+            'icon' => 'fas fa-tachometer-alt',
             'url' => 'dashboard',
         ],
         [
@@ -360,15 +360,16 @@ return [
             ],
         ],    
         [
-            'text' => 'Summary',
+            'text' => 'Ringkasan Stok',
             'icon' => 'fas fa-copy',
-            'submenu' => [
-                [
-                    'text' => 'Stok',
-                    'icon' => 'fas fa-box',
-                    'url' => '#',
-                ],
-            ]
+            'url' => 'summary-stock',
+            // 'submenu' => [
+            //     [
+            //         'text' => 'Stok',
+            //         'icon' => 'fas fa-box',
+            //         'url' => '#',
+            //     ],
+            // ]
         ]    
 
 
