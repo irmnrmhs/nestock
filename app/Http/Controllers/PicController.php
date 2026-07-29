@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\pic;
+use App\Models\Pic;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PicController extends Controller
 {
     public string $obj = 'PIC';
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $pics = pic::latest()->get();
+        $pics = Pic::latest()->get();
         return view('masters.pic', compact('pics'));
     }
 
@@ -35,7 +36,7 @@ class PicController extends Controller
             'nama'=>'required|string',
         ]);
 
-        $pic = pic::create($validated);
+        $pic = Pic::create($validated);
 
         return response()->json([
             'status'=>'success',
@@ -47,7 +48,7 @@ class PicController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(pic $pic)
+    public function show(Pic $pic)
     {
         return response()->json($pic);
     }
@@ -55,7 +56,7 @@ class PicController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(pic $pic)
+    public function edit(Pic $pic)
     {
         //
     }
@@ -63,7 +64,7 @@ class PicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, pic $pic)
+    public function update(Request $request, Pic $pic)
     {
         $validated = $request->validate([
             'nama'  => 'required|string',
@@ -80,7 +81,7 @@ class PicController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(pic $pic)
+    public function destroy(Pic $pic)
     {
         $pic->delete();
 
