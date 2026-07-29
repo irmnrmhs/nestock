@@ -1,7 +1,7 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Ringkasan Stok';
+    $title = 'Data Ringkasan Stok';
     $singular = 'Ringkasan Stok';
     $hideImportButton = true;
     $hideAddButton = true;
