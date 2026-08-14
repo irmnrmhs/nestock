@@ -28,7 +28,7 @@
         <div class="small-box bg-success">
             <div class="inner">
                 <h3>{{ number_format($totalIncomingWeight,2) }}</h3>
-                <p>Total Berat Masuk (Kg)</p>
+                <p>Total Berat Masuk (kg)</p>
             </div>
             <div class="icon">
                 <i class="fas fa-arrow-down"></i>
@@ -40,7 +40,7 @@
         <div class="small-box bg-warning">
             <div class="inner">
                 <h3>{{ number_format($totalOutgoingWeight,2) }}</h3>
-                <p>Total Berat Keluar (Kg)</p>
+                <p>Total Berat Keluar (kg)</p>
             </div>
             <div class="icon">
                 <i class="fas fa-arrow-up"></i>
@@ -58,7 +58,7 @@
                     </small>
                 </h3>
 
-                <p>Sisa Gudang (Kg)</p>
+                <p>Sisa Gudang (kg)</p>
             </div>
             <div class="icon">
                 <i class="fas fa-warehouse"></i>

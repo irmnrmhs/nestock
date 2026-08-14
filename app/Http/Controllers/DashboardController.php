@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // statistik dashboard
+        // card
         $supplier = Supplier::count();
 
         $totalIncomingWeight = IncomingStock::sum('berat');
@@ -86,7 +86,6 @@ class DashboardController extends Controller
         $outgoingByGrade = Product::with('inStoks.outStocks')
         ->get()
         ->map(function ($product) {
-
             $beratKeluar = $product->inStoks->sum(function ($stock) {
                 return $stock->outStocks->sum('berat');
             });
@@ -96,7 +95,6 @@ class DashboardController extends Controller
                 'berat' => $beratKeluar,
             ];
         });
-
 
         return view('dashboard', compact(
 

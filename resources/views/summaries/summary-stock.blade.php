@@ -6,14 +6,14 @@
     $hideImportButton = true;
     $hideAddButton = true;
     $hideActions = true;
-    $exportUrl = route('summary.export');
+    // $exportUrl = route('summary.export');
 @endphp
 
 @section('content')
 
 <div class="d-flex justify-content-end mb-3">
     <button type="button" class="btn btn-success" id="btnExport">
-        <i class="fas fa-file-export"></i> Export
+        <i class="fas fa-file-export"></i> Ekspor
     </button>
 </div>
 
