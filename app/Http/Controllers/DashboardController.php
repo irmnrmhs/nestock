@@ -12,12 +12,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // filter tahun
+        $tahun = request('tahun', now()->year);
+
+        $years = IncomingStock::selectRaw('YEAR(tanggal) as tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+
         // card
         $supplier = Supplier::count();
 
-        $totalIncomingWeight = IncomingStock::sum('berat');
+        $totalIncomingWeight = IncomingStock::whereYear('tanggal', $tahun)
+            ->sum('berat');
 
-        $totalOutgoingWeight = OutgoingStock::sum('berat');
+        $totalOutgoingWeight = OutgoingStock::whereYear('tanggal', $tahun)
+            ->sum('berat');
 
         $remainingWeight = $totalIncomingWeight - $totalOutgoingWeight;
 
@@ -49,7 +60,11 @@ class DashboardController extends Controller
 
 
         // histogram berat perbulan
-        $incomingBySupplier = Supplier::with('inStoks')
+        $incomingBySupplier = Supplier::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($supplier) {
             return [
@@ -58,7 +73,14 @@ class DashboardController extends Controller
             ];
         });
 
-        $outgoingBySupplier = Supplier::with('inStoks.outStocks')
+        $outgoingBySupplier = Supplier::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            },
+            'inStoks.outStocks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($supplier) {
 
@@ -73,7 +95,11 @@ class DashboardController extends Controller
         });
         
         // histogram berat pergrade
-        $incomingByGrade = Product::with('inStoks')
+        $incomingByGrade = Product::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($product) {
 
@@ -83,9 +109,17 @@ class DashboardController extends Controller
             ];
         });
 
-        $outgoingByGrade = Product::with('inStoks.outStocks')
+        $outgoingByGrade = Product::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            },
+            'inStoks.outStocks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($product) {
+
             $beratKeluar = $product->inStoks->sum(function ($stock) {
                 return $stock->outStocks->sum('berat');
             });

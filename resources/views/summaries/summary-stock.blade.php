@@ -62,10 +62,11 @@
 @section('export')
 
 <div class="mb-3">
-    <label>Format Export</label>
+    <label>Aksi</label>
     <select name="format" class="form-control" required>
-        <option value="pdf">PDF</option>
-        <option value="excel">Excel</option>
+        <option value="preview">Preview</option>
+        <option value="pdf">Download PDF</option>
+        <option value="excel">Download Excel</option>
     </select>
 </div>
 

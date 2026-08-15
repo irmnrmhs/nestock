@@ -10,8 +10,34 @@
 
 <p>Selamat datang, <strong>{{ auth()->user()->name }}</strong>!</p>
 
-<div class="row">
 
+{{-- Filter Tahun --}}
+<div class="d-flex justify-content-center mb-4">
+    <form method="GET" action="{{ route('dashboard') }}">
+        <div class="text-center">
+            <label for="tahun" class="mb-1">
+                Filter Tahun
+            </label>
+            <select name="tahun"
+                    id="tahun"
+                    class="form-control"
+                    style="width: 200px;"
+                    onchange="this.form.submit()">
+
+                @foreach($years as $year)
+                    <option value="{{ $year }}"
+                        {{ $tahun == $year ? 'selected' : '' }}>
+                        {{ $year }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </form>
+</div>
+
+
+{{-- Card Statistik --}}
+<div class="row">
     <div class="col-lg-3 col-md-6">
         <div class="small-box bg-info">
             <div class="inner">
@@ -27,9 +53,12 @@
     <div class="col-lg-3 col-md-6">
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>{{ number_format($totalIncomingWeight,2) }}</h3>
+                <h3>
+                    {{ number_format($totalIncomingWeight, 2) }}
+                </h3>
                 <p>Total Berat Masuk (kg)</p>
             </div>
+
             <div class="icon">
                 <i class="fas fa-arrow-down"></i>
             </div>
@@ -39,9 +68,12 @@
     <div class="col-lg-3 col-md-6">
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>{{ number_format($totalOutgoingWeight,2) }}</h3>
+                <h3>
+                    {{ number_format($totalOutgoingWeight, 2) }}
+                </h3>
                 <p>Total Berat Keluar (kg)</p>
             </div>
+
             <div class="icon">
                 <i class="fas fa-arrow-up"></i>
             </div>
@@ -60,133 +92,59 @@
 
                 <p>Sisa Gudang (kg)</p>
             </div>
+
             <div class="icon">
                 <i class="fas fa-warehouse"></i>
             </div>
         </div>
     </div>
-
 </div>
-
 
 {{-- Line Chart --}}
 <div class="card">
-
-    <div class="card-header d-flex justify-content-between align-items-center">
-
+    <div class="card-header">
         <h3 class="card-title">
             Berat Masuk & Keluar per Bulan
         </h3>
-
-        <form method="GET" action="{{ route('dashboard') }}">
-
-            <select name="tahun"
-                    class="form-control"
-                    onchange="this.form.submit()">
-
-                @foreach($years as $year)
-                    <option value="{{ $year }}"
-                        {{ $tahun == $year ? 'selected' : '' }}>
-                        {{ $year }}
-                    </option>
-                @endforeach
-
-            </select>
-
-        </form>
-
     </div>
 
     <div class="card-body">
         <canvas id="monthlyChart"></canvas>
     </div>
-
 </div>
 
-
+{{-- Supplier Chart --}}
 <div class="row">
-
-    {{-- Supplier Masuk --}}
-    <div class="col-md-6">
-
+    <div class="col-md-12">
         <div class="card">
-
             <div class="card-header">
                 <h3 class="card-title">
-                    Berat Masuk berdasarkan Supplier
+                    Berat Masuk & Keluar berdasarkan Supplier
                 </h3>
             </div>
 
             <div class="card-body">
-                <canvas id="supplierIncomingChart"></canvas>
+                <canvas id="supplierChart"></canvas>
             </div>
-
         </div>
-
     </div>
-
-    {{-- Supplier Keluar --}}
-    <div class="col-md-6">
-
-        <div class="card">
-
-            <div class="card-header">
-                <h3 class="card-title">
-                    Berat Keluar berdasarkan Supplier
-                </h3>
-            </div>
-
-            <div class="card-body">
-                <canvas id="supplierOutgoingChart"></canvas>
-            </div>
-
-        </div>
-
-    </div>
-
 </div>
 
-
+{{-- Grade Chart --}}
 <div class="row">
-
-    {{-- Grade Masuk --}}
-    <div class="col-md-6">
-
+    <div class="col-md-12">
         <div class="card">
-
             <div class="card-header">
                 <h3 class="card-title">
-                    Berat Masuk berdasarkan Grade
+                    Berat Masuk & Keluar berdasarkan Grade
                 </h3>
             </div>
 
             <div class="card-body">
-                <canvas id="gradeIncomingChart"></canvas>
+                <canvas id="gradeChart"></canvas>
             </div>
-
         </div>
-
     </div>
-
-    {{-- Grade Keluar --}}
-    <div class="col-md-6">
-
-        <div class="card">
-
-            <div class="card-header">
-                <h3 class="card-title">
-                    Berat Keluar berdasarkan Grade
-                </h3>
-            </div>
-
-            <div class="card-body">
-                <canvas id="gradeOutgoingChart"></canvas>
-            </div>
-
-        </div>
-
-    </div>
-
 </div>
 
 @stop
@@ -198,124 +156,119 @@
 
 <script>
 
-const monthNames=[
-'Jan','Feb','Mar','Apr','Mei','Jun',
-'Jul','Agu','Sep','Okt','Nov','Des'
+const monthNames = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
 
 // Line Chart
+new Chart(document.getElementById('monthlyChart'), {
 
-new Chart(document.getElementById('monthlyChart'),{
-
-    type:'line',
-
-    data:{
-
+    type: 'line',
+    data: {
         labels: monthNames,
+        datasets: [
+            {
+                label: 'Berat Masuk',
+                data: @json($incomingPerMonth->pluck('total')),
+                borderWidth: 2,
+                fill: false
+            },
 
-        datasets:[
-        {
-            label:'Berat Masuk',
-            data:@json($incomingPerMonth->pluck('total')),
-            borderWidth:2,
-            fill:false
-        },
-        {
-            label:'Berat Keluar',
-            data:@json($outgoingPerMonth->pluck('total')),
-            borderWidth:2,
-            fill:false
-        }]
+            {
+                label: 'Berat Keluar',
+                data: @json($outgoingPerMonth->pluck('total')),
+                borderWidth: 2,
+                fill: false
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Berat (kg)'
+                }
+            }
+        }
     }
 
 });
 
+// Stok Masuk & Keluar berdasarkan Supplier
+new Chart(document.getElementById('supplierChart'), {
 
-// Supplier Masuk
+    type: 'bar',
+    data: {
+        labels: @json($incomingBySupplier->pluck('supplier')),
+        datasets: [
+            {
+                label: 'Berat Masuk',
+                data: @json($incomingBySupplier->pluck('berat')),
+                borderWidth: 1
+            },
 
-new Chart(document.getElementById('supplierIncomingChart'),{
+            {
+                label: 'Berat Keluar',
+                data: @json($outgoingBySupplier->pluck('berat')),
+                borderWidth: 1
+            }
+        ]
+    },
 
-    type:'bar',
-
-    data:{
-
-        labels:@json($incomingBySupplier->pluck('supplier')),
-
-        datasets:[{
-
-            label:'Kg',
-
-            data:@json($incomingBySupplier->pluck('berat'))
-
-        }]
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Berat (kg)'
+                }
+            }
+        }
     }
-
 });
 
 
-// Supplier Keluar
+// Stok Masuk & Keluar berdasarkan Grade
+new Chart(document.getElementById('gradeChart'), {
 
-new Chart(document.getElementById('supplierOutgoingChart'),{
+    type: 'bar',
+    data: {
+        labels: @json($incomingByGrade->pluck('grade')),
+        datasets: [
+            {
+                label: 'Berat Masuk',
+                data: @json($incomingByGrade->pluck('berat')),
+                borderWidth: 1
+            },
 
-    type:'bar',
+            {
+                label: 'Berat Keluar',
+                data: @json($outgoingByGrade->pluck('berat')),
+                borderWidth: 1
+            }
+        ]
+    },
 
-    data:{
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
 
-        labels:@json($outgoingBySupplier->pluck('supplier')),
-
-        datasets:[{
-
-            label:'Kg',
-
-            data:@json($outgoingBySupplier->pluck('berat'))
-
-        }]
+                title: {
+                    display: true,
+                    text: 'Berat (kg)'
+                }
+            }
+        }
     }
-
-});
-
-
-// Grade Masuk
-
-new Chart(document.getElementById('gradeIncomingChart'),{
-
-    type:'bar',
-
-    data:{
-
-        labels:@json($incomingByGrade->pluck('grade')),
-
-        datasets:[{
-
-            label:'Kg',
-
-            data:@json($incomingByGrade->pluck('berat'))
-
-        }]
-    }
-
-});
-
-
-// Grade Keluar
-
-new Chart(document.getElementById('gradeOutgoingChart'),{
-
-    type:'bar',
-
-    data:{
-
-        labels:@json($outgoingByGrade->pluck('grade')),
-
-        datasets:[{
-
-            label:'Kg',
-
-            data:@json($outgoingByGrade->pluck('berat'))
-
-        }]
-    }
-
 });
 
 </script>
