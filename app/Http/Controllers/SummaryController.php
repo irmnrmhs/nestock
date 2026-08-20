@@ -41,7 +41,7 @@ class SummaryController extends Controller
     public function export(Request $request)
     {
         $request->validate([
-            'format' => 'required|in:excel,pdf',
+            'format' => 'required|in:preview,pdf,excel',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'product_id' => 'nullable|exists:products,id',
             'bulan' => 'nullable|date_format:Y-m',
@@ -78,6 +78,10 @@ class SummaryController extends Controller
             'product'  => $product,
             'bulan'    => $bulan,
         ]);
+
+        if ($request->format === 'pdf') {
+            return $pdf->download('summary-stock.pdf');
+        }
 
         return $pdf->stream('summary-stock.pdf');
     }
