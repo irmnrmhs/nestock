@@ -15,6 +15,7 @@
     <th>Keping</th>
     <th>Berat</th>
     <th>PIC</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
@@ -28,6 +29,7 @@
             <td>{{ $inStock->kuantitas }}</td>
             <td>{{ $inStock->berat }}</td>
             <td>{{ optional($inStock->pic)->nama ?? '-' }}</td>
+            <td>{{ $inStock->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -81,6 +83,11 @@
             @endforeach
         </select>
     </div>
+    
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="ket" class="form-control">
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -97,6 +104,7 @@
         kuantitas: $('#kuantitas').val(),
         berat: $('#berat').val(),
         pic_id: $('#pic_id').val(),
+        keterangan: $('#keterangan').val(),
     };
 
     fetch(url, {
@@ -129,6 +137,7 @@
                 $('#kuantitas').val(inStock.kuantitas);
                 $('#berat').val(inStock.berat);
                 $('#pic_id').val(inStock.pic_id);
+                $('#keterangan').val(inStock.keterangan);
                 $('#modalTitle').text('Edit Stok Masuk');
                 new bootstrap.Modal('#crudModal').show();
             });
