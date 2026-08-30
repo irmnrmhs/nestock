@@ -71,11 +71,11 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/outgoing-stock/${id}` : '/outgoing-stock';
-    const method = id ? 'PUT' : 'POST';
+const url = id ? `/outgoing-stock/${id}` : '/outgoing-stock';
+const method = id ? 'PUT' : 'POST';
 
-    const data = {
-        _token: '{{ csrf_token() }}',
+const data = {
+    _token: '{{ csrf_token() }}',
         incoming_stock_id: $('#incoming_stock_id').val(),
         tanggal: $('#tanggal').val(),
         kuantitas: $('#kuantitas').val(),
@@ -85,18 +85,33 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
         body: JSON.stringify(data)
     })
-    .then(r => r.json())
+    .then(async response => {
+        const res = await response.json();
+
+        if (!response.ok) {
+            throw new Error(res.message || 'Terjadi kesalahan');
+        }
+
+        return res;
+    })
     .then(res => {
         if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
+            Swal.fire('Sukses', res.message, 'success')
+                .then(() => location.reload());
         } else {
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
+    .catch(error => {
+        Swal.fire('Gagal', error.message || 'Terjadi kesalahan', 'error');
+    });
 @stop
 
 @section('custom-js')

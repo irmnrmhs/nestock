@@ -20,7 +20,7 @@
         </td>
 
         <td class="title">
-            <h1>DATA RINGKASAN STOK</h1>
+            <h1>LAPORAN STOK</h1>
             <h2>PT ANUGRAH ALAM NESTINDO</h2>
         </td>
 
@@ -60,71 +60,77 @@
 
     <thead>
 
-    <tr>
+        <tr>
 
-        <th rowspan="3" width="45">
-            No
-            <br>
-            <span>(No)</span>
-        </th>
+            <th rowspan="3" width="20">
+                No
+                <br>
+                <span>(No)</span>
+            </th>
 
-        <th rowspan="3" width="120">
-            Tanggal Kedatangan
-            <br>
-            <span>(Arrival Date)</span>
-        </th>
+            <th rowspan="3" width="40">
+                Supplier
+                <br>
+                <span>(Supplier)</span>
+            </th>
 
-        <th colspan="2">
-            Jumlah Barang Masuk
-            <br>
-            <span>(Quantity of Incoming)</span>
-        </th>
+            <th rowspan="3" width="70">
+                Tanggal Kedatangan
+                <br>
+                <span>(Arrival Date)</span>
+            </th>
 
-        <th rowspan="3" width="120">
-            Tanggal Keluar Terakhir
-            <br>
-            <span>(Last Outgoing Date)</span>
-        </th>
+            <th colspan="2">
+                Jumlah Barang Masuk
+                <br>
+                <span>(Quantity of Incoming)</span>
+            </th>
 
-        <th colspan="2">
-            Jumlah Barang Keluar
-            <br>
-            <span>(Quantity of Outgoing)</span>
-        </th>
+            <th rowspan="3" width="70">
+                Tanggal Keluar Terakhir
+                <br>
+                <span>(Last Outgoing Date)</span>
+            </th>
 
-        <th colspan="2">
-            Sisa Stok
-            <br>
-            <span>(Stock)</span>
-        </th>
+            <th colspan="2">
+                Jumlah Barang Keluar
+                <br>
+                <span>(Quantity of Outgoing)</span>
+            </th>
 
-    </tr>
+            <th colspan="2">
+                Sisa Stok
+                <br>
+                <span>(Stock Remaining)</span>
+            </th>
 
-    <tr>
+        </tr>
 
-        <th>Bag</th>
-        <th>Gram</th>
+        <tr>
 
-        <th>Bag</th>
-        <th>Gram</th>
+            <th width="50">Keping</th>
+            <th width="50">Berat</th>
 
-        <th>Bag</th>
-        <th>Gram</th>
+            <th width="50">Keping</th>
+            <th width="50">Berat</th>
 
-    </tr>
+            <th width="40">Keping</th>
+            <th width="40">Berat</th>
 
-    <tr>
+        </tr>
 
-        <th><span>(Bags)</span></th>
-        <th><span>(Gram)</span></th>
+        <tr>
 
-        <th><span>(Bags)</span></th>
-        <th><span>(Gram)</span></th>
+            <th><span>(Pcs)</span></th>
+            <th><span>(Gram)</span></th>
 
-        <th><span>(Bags)</span></th>
-        <th><span>(Gram)</span></th>
+            <th><span>(Pcs)</span></th>
+            <th><span>(Gram)</span></th>
 
-    </tr>
+            <th><span>(Pcs)</span></th>
+            <th><span>(Gram)</span></th>
+
+        </tr>
 
     </thead>
 
@@ -132,49 +138,37 @@
 
         @forelse($stocks as $index => $stock)
 
-            <tr>
+        <tr>
 
-                <td class="center">{{ $index + 1 }}</td>
+            <td class="center">{{ $index + 1 }}</td>
 
-                <td>{{ $stock['Tanggal Masuk'] ?? '-' }}</td>
+            <td>{{ $stock['Supplier'] }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Keping Masuk']) }}
-                </td>
+            <td>{{ $stock['Tanggal Masuk'] ?? '-' }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Berat Masuk'], 0, ',', '.') }}
-                </td>
+            <td class="right">{{ number_format($stock['Keping Masuk']) }}</td>
 
-                <td>
-                    {{ $stock['Tanggal Keluar'] ?? '-' }}
-                </td>
+            <td class="right">{{ number_format($stock['Berat Masuk'],0,',','.') }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Keping Keluar']) }}
-                </td>
+            <td>{{ $stock['Tanggal Keluar'] ?? '-' }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Berat Keluar'], 0, ',', '.') }}
-                </td>
+            <td class="right">{{ number_format($stock['Keping Keluar']) }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Sisa Keping']) }}
-                </td>
+            <td class="right">{{ number_format($stock['Berat Keluar'],0,',','.') }}</td>
 
-                <td class="right">
-                    {{ number_format($stock['Sisa Berat'], 0, ',', '.') }}
-                </td>
+            <td class="right">{{ number_format($stock['Sisa Keping']) }}</td>
 
-            </tr>
+            <td class="right">{{ number_format($stock['Sisa Berat'],0,',','.') }}</td>
+
+        </tr>
 
         @empty
 
-            <tr>
-                <td colspan="9" class="center">
-                    <strong>Data masih kosong</strong>
-                </td>
-            </tr>
+        <tr>
+            <td colspan="10" class="center">
+                <strong>Data masih kosong</strong>
+            </td>
+        </tr>
 
         @endforelse
 

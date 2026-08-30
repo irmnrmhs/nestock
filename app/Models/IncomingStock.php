@@ -14,6 +14,7 @@ class IncomingStock extends Model
         'tanggal',
         'kuantitas',
         'berat',
+        'keterangan',
     ];
 
     public function supplier()

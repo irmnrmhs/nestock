@@ -6,100 +6,180 @@ use App\Models\IncomingStock;
 use App\Models\OutgoingStock;
 use App\Models\Product;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // statistik dashboard
-        $supplier = Supplier::count();
+        // FILTER TAHUN
 
-        $totalIncomingWeight = IncomingStock::sum('berat');
-
-        $totalOutgoingWeight = OutgoingStock::sum('berat');
-
-        $remainingWeight = $totalIncomingWeight - $totalOutgoingWeight;
-
-        $remainingPercentage = $totalIncomingWeight > 0
-            ? ($remainingWeight / $totalIncomingWeight) * 100
-            : 0;
-
-
-        // line chart
-        $tahun = request('tahun', now()->year);
         $years = IncomingStock::selectRaw('YEAR(tanggal) as tahun')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
-        $incomingPerMonth = IncomingStock::selectRaw('MONTH(tanggal) as bulan')
-            ->selectRaw('SUM(berat) as total')
+        // Default menggunakan tahun terbaru yang tersedia
+        $tahun = request('tahun', $years->first());
+
+
+        // CARD STATISTIK
+
+        $supplier = Supplier::count();
+
+        // Total berat masuk
+        $totalIncomingWeight = IncomingStock::whereYear('tanggal', $tahun)
+            ->sum('berat')/1000;
+
+        // Total berat keluar
+        $totalOutgoingWeight = OutgoingStock::whereYear('tanggal', $tahun)
+            ->sum('berat')/1000;
+
+        // Sisa berat
+        $remainingWeight = $totalIncomingWeight - $totalOutgoingWeight;
+
+        // Persentase sisa
+        $remainingPercentage = $totalIncomingWeight > 0
+            ? ($remainingWeight / $totalIncomingWeight) * 100
+            : 0;
+
+
+        // LINE CHART
+        // BERAT MASUK PER BULAN
+
+        $incomingPerMonth = IncomingStock::selectRaw(
+                'MONTH(tanggal) as bulan'
+            )
+            ->selectRaw(
+                'SUM(berat) as total'
+            )
             ->whereYear('tanggal', $tahun)
-            ->groupBy('bulan')
-            ->orderBy('bulan')
+            ->groupByRaw('MONTH(tanggal)')
+            ->orderByRaw('MONTH(tanggal)')
             ->get();
 
-        $outgoingPerMonth = OutgoingStock::selectRaw('MONTH(tanggal) as bulan')
-            ->selectRaw('SUM(berat) as total')
+
+        // BERAT KELUAR PER BULAN
+        $outgoingPerMonth = OutgoingStock::selectRaw(
+                'MONTH(tanggal) as bulan'
+            )
+            ->selectRaw(
+                'SUM(berat) as total'
+            )
             ->whereYear('tanggal', $tahun)
-            ->groupBy('bulan')
-            ->orderBy('bulan')
+            ->groupByRaw('MONTH(tanggal)')
+            ->orderByRaw('MONTH(tanggal)')
             ->get();
 
 
-        // histogram berat perbulan
-        $incomingBySupplier = Supplier::with('inStoks')
+        // Siapkan 12 bulan
+        $incomingData = array_fill(1, 12, 0);
+        $outgoingData = array_fill(1, 12, 0);
+
+
+        foreach ($incomingPerMonth as $item) {
+            $incomingData[$item->bulan] = (float) $item->total;
+        }
+
+
+        foreach ($outgoingPerMonth as $item) {
+            $outgoingData[$item->bulan] = (float) $item->total;
+        }
+
+
+        // SUPPLIER
+        // BERAT MASUK
+
+        $incomingBySupplier = Supplier::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($supplier) {
             return [
                 'supplier' => $supplier->supplier,
-                'berat' => $supplier->inStoks->sum('berat'),
+                'berat' => (float) $supplier
+                    ->inStoks
+                    ->sum('berat'),
             ];
         });
 
-        $outgoingBySupplier = Supplier::with('inStoks.outStocks')
+
+        // SUPPLIER
+        // BERAT KELUAR
+
+        $outgoingBySupplier = Supplier::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            },
+            'inStoks.outStocks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($supplier) {
-
-            $beratKeluar = $supplier->inStoks->sum(function ($stock) {
-                return $stock->outStocks->sum('berat');
-            });
-
+            $beratKeluar = $supplier->inStoks->sum(
+                function ($stock) {
+                    return $stock
+                        ->outStocks
+                        ->sum('berat');
+                }
+            );
             return [
                 'supplier' => $supplier->supplier,
-                'berat' => $beratKeluar,
+                'berat' => (float) $beratKeluar,
             ];
         });
-        
-        // histogram berat pergrade
-        $incomingByGrade = Product::with('inStoks')
+
+
+        // GRADE
+        // BERAT MASUK
+
+        $incomingByGrade = Product::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($product) {
-
             return [
                 'grade' => $product->grade,
-                'berat' => $product->inStoks->sum('berat'),
+                'berat' => (float) $product
+                    ->inStoks
+                    ->sum('berat'),
             ];
         });
 
-        $outgoingByGrade = Product::with('inStoks.outStocks')
+
+        // GRADE
+        // BERAT KELUAR
+
+        $outgoingByGrade = Product::with([
+            'inStoks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            },
+            'inStoks.outStocks' => function ($query) use ($tahun) {
+                $query->whereYear('tanggal', $tahun);
+            }
+        ])
         ->get()
         ->map(function ($product) {
-
-            $beratKeluar = $product->inStoks->sum(function ($stock) {
-                return $stock->outStocks->sum('berat');
-            });
-
+            $beratKeluar = $product->inStoks->sum(
+                function ($stock) {
+                    return $stock
+                        ->outStocks
+                        ->sum('berat');
+                }
+            );
             return [
                 'grade' => $product->grade,
-                'berat' => $beratKeluar,
+                'berat' => (float) $beratKeluar,
             ];
         });
 
 
+        // RETURN VIEW
         return view('dashboard', compact(
-
             'supplier',
 
             'totalIncomingWeight',
@@ -109,14 +189,16 @@ class DashboardController extends Controller
 
             'tahun',
             'years',
-            'incomingPerMonth',
-            'outgoingPerMonth',
+
+            'incomingData',
+            'outgoingData',
 
             'incomingBySupplier',
             'outgoingBySupplier',
 
             'incomingByGrade',
             'outgoingByGrade'
+
         ));
     }
 }

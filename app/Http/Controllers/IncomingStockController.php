@@ -45,6 +45,7 @@ class IncomingStockController extends Controller
             'tanggal'       => 'required|date',
             'kuantitas'     => 'required|numeric|min:0',
             'berat'         => 'required|numeric|min:0|max:999999.99',
+            'keterangan'    => 'nullable',
         ]);
 
         $supplier = Supplier::find($validated['supplier_id']);
@@ -95,6 +96,7 @@ class IncomingStockController extends Controller
             'tanggal'       => 'required|date',
             'kuantitas'     => 'required|numeric|min:0',
             'berat'         => 'required|numeric|min:0|max:999999.99',
+            'keterangan'    => 'nullable',
         ]);
 
         $supplier = Supplier::find($validated['supplier_id']);

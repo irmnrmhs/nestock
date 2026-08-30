@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->integer('kuantitas');
             $table->decimal('berat', 8, 2);
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
