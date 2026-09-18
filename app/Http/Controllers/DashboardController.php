@@ -77,12 +77,11 @@ class DashboardController extends Controller
 
 
         foreach ($incomingPerMonth as $item) {
-            $incomingData[$item->bulan] = (float) $item->total;
+            $incomingData[$item->bulan] = (float) $item->total / 1000;
         }
 
-
         foreach ($outgoingPerMonth as $item) {
-            $outgoingData[$item->bulan] = (float) $item->total;
+            $outgoingData[$item->bulan] = (float) $item->total / 1000;
         }
 
 
@@ -100,7 +99,7 @@ class DashboardController extends Controller
                 'supplier' => $supplier->supplier,
                 'berat' => (float) $supplier
                     ->inStoks
-                    ->sum('berat'),
+                    ->sum('berat') / 1000,
             ];
         });
 
@@ -127,7 +126,7 @@ class DashboardController extends Controller
             );
             return [
                 'supplier' => $supplier->supplier,
-                'berat' => (float) $beratKeluar,
+                'berat' => (float) $beratKeluar / 1000,
             ];
         });
 
@@ -146,7 +145,7 @@ class DashboardController extends Controller
                 'grade' => $product->grade,
                 'berat' => (float) $product
                     ->inStoks
-                    ->sum('berat'),
+                    ->sum('berat') / 1000,
             ];
         });
 
@@ -173,7 +172,7 @@ class DashboardController extends Controller
             );
             return [
                 'grade' => $product->grade,
-                'berat' => (float) $beratKeluar,
+                'berat' => (float) $beratKeluar / 1000,
             ];
         });
 

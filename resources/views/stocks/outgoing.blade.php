@@ -10,8 +10,8 @@
     <th>No</th>
     <th>Kode Barang Jadi</th>
     <th>Tanggal</th>
-    <th>Keping</th>
-    <th>Berat</th>
+    <th>Keping (pcs)</th>
+    <th>Berat (gram)</th>
     <th>PIC</th>
 @stop
 
@@ -21,8 +21,8 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $outStock->inStock->kode }}</td>
             <td>{{ $outStock->tanggal }}</td>
-            <td>{{ $outStock->kuantitas }}</td>
-            <td>{{ $outStock->berat }}</td>
+            <td class="numcol">{{ number_format($outStock->kuantitas, 0, ',', '.') }}</td>
+            <td class="numcol">{{ number_format($outStock->berat, 2, ',', '.') }}</td>
             <td>{{ optional($outStock->pic)->nama ?? '-' }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
