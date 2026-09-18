@@ -19,7 +19,7 @@ class OutgoingStockController extends Controller
     public function index(): View
     {
         $outStocks = OutgoingStock::with('inStock', 'pic')->latest()->get();
-        $inStocks = IncomingStock::all();
+        $inStocks = IncomingStock::latest('tanggal')->get();
         $pics = Pic::all();
 
         return view('stocks.outgoing', compact('outStocks', 'inStocks', 'pics'));

@@ -6,7 +6,7 @@
 
     <title>Data Ringkasan Stok</title>
 
-    <link rel="stylesheet" href="{{ public_path('css/style.css') }}">
+    <link rel="stylesheet" href="{{ public_path('css/form.css') }}">
 </head>
 
 <body>

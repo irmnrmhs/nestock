@@ -12,8 +12,8 @@
     <th>Supplier</th>
     <th>Grade</th>
     <th>Tanggal</th>
-    <th>Keping</th>
-    <th>Berat</th>
+    <th>Keping (pcs)</th>
+    <th>Berat (gram)</th>
     <th>PIC</th>
     <th>Keterangan</th>
 @stop
@@ -26,8 +26,8 @@
             <td>{{ $inStock->supplier->supplier }}</td>
             <td>{{ $inStock->product->grade }}</td>
             <td>{{ $inStock->tanggal }}</td>
-            <td>{{ $inStock->kuantitas }}</td>
-            <td>{{ $inStock->berat }}</td>
+            <td class="numcol">{{ number_format($inStock->kuantitas, 0, ',', '.') }}</td>
+            <td class="numcol">{{ number_format($inStock->berat, 2, ',', '.') }}</td>
             <td>{{ optional($inStock->pic)->nama ?? '-' }}</td>
             <td>{{ $inStock->keterangan }}</td>
             <td>

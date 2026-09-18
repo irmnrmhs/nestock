@@ -908,7 +908,7 @@ class IncomingStockSeeder extends Seeder
                 'kode' => 'KS5-141125',
                 'supplier_id' => 3,
                 'product_id' => 3,
-                'tanggal' => '2025/11/14',
+                'tanggal' => '2025/11/14  ',
                 'kuantitas' => 1000,
                 'berat' => 50000,
             ]

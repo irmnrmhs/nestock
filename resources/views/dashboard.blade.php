@@ -53,7 +53,7 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{ number_format($totalIncomingWeight, 2) }}</h3>
-                    <p>Total Berat Masuk (kg)</p>
+                    <p>Total Berat Masuk (ton)</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-arrow-down"></i>
@@ -66,7 +66,7 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>{{ number_format($totalOutgoingWeight, 2) }}</h3>
-                    <p>Total Berat Keluar (kg)</p>
+                    <p>Total Berat Keluar (ton)</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-arrow-up"></i>
@@ -82,7 +82,7 @@
                         {{ number_format($remainingWeight, 2) }}
                         <small>({{ number_format($remainingPercentage, 2) }}%)</small>
                     </h3>
-                    <p>Sisa Gudang (kg)</p>
+                    <p>Sisa Gudang (ton)</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-warehouse"></i>
@@ -189,7 +189,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Berat (kg)'
+                                text: 'Berat (ton)'
                             }
                         }
                     }
@@ -233,7 +233,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Berat (kg)'
+                                text: 'Berat (ton)'
                             }
                         }
                     }
@@ -278,7 +278,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Berat (kg)'
+                                text: 'Berat (ton)'
                             }
                         }
                     }

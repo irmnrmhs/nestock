@@ -26,12 +26,12 @@
     <th>Kode Barang Jadi</th>
     <th>Supplier</th>
     <th>Grade</th>
-    <th>Keping Masuk</th>
-    <th>Keping Keluar</th>
-    <th>Sisa Keping</th>
-    <th>Berat Masuk</th>
-    <th>Berat Keluar</th>
-    <th>Sisa Berat</th>
+    <th>Keping Masuk (pcs)</th>
+    <th>Keping Keluar (pcs)</th>
+    <th>Sisa Keping (pcs)</th>
+    <th>Berat Masuk (gram)</th>
+    <th>Berat Keluar (gram)</th>
+    <th>Sisa Berat (gram)</th>
 @stop
 
 @section('table-body')
@@ -47,13 +47,13 @@
         <td>{{ $stock->supplier->supplier }}</td>
         <td>{{ $stock->product->grade }}</td>
 
-        <td>{{ $stock->kuantitas }}</td>
-        <td>{{ $keluarQty }}</td>
-        <td>{{ $stock->kuantitas - $keluarQty }}</td>
+        <td class="numcol">{{ number_format($stock->kuantitas, 0, ',', '.') }}</td>
+        <td class="numcol">{{ number_format($keluarQty, 0, ',', '.') }}</td>
+        <td class="numcol">{{ number_format($stock->kuantitas - $keluarQty, 0, ',', '.') }}</td>
 
-        <td>{{ $stock->berat }}</td>
-        <td>{{ $keluarBerat }}</td>
-        <td>{{ $stock->berat - $keluarBerat }}</td>
+        <td class="numcol">{{ number_format($stock->berat, 2, ',', '.') }}</td>
+        <td class="numcol">{{ number_format($keluarBerat, 2, ',', '.') }}</td>
+        <td class="numcol">{{ number_format($stock->berat - $keluarBerat, 2, ',', '.') }}</td>
     </tr>
 
     @endforeach
@@ -101,5 +101,4 @@
         Kosongkan untuk semua bulan.
     </small>
 </div>
-
 @endsection
